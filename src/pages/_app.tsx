@@ -1,9 +1,33 @@
 import { withTRPC } from "@trpc/next";
-import { AppType } from "next/dist/shared/lib/utils";
-import type { AppRouter } from "./api/trpc/[trpc]";
+import Head from "next/head";
+import { AppProps } from "next/app";
+import CssBaseline from "@mui/material/CssBaseline";
+import { ThemeProvider } from "@mui/material/styles";
+import { CacheProvider, EmotionCache } from "@emotion/react";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
-  return <Component {...pageProps} />;
+import type { AppRouter } from "./api/trpc/[trpc]";
+import createEmotionCache from "@/shared/utils/createEmotionCache";
+import { theme } from "@/shared/styles/theme";
+
+const clientSideEmotionCache = createEmotionCache();
+
+export interface MyAppProps extends AppProps {
+  emotionCache?: EmotionCache;
+}
+
+const MyApp = (props: MyAppProps) => {
+  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
+  return (
+    <CacheProvider value={emotionCache}>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Component {...pageProps} />
+      </ThemeProvider>
+    </CacheProvider>
+  );
 };
 
 export default withTRPC<AppRouter>({
