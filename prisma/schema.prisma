@@ -9,3 +9,116 @@ datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
 }
+
+// /* -------------------------------------------------------------------------- */
+// /*                                  Providers                                 */
+// /* -------------------------------------------------------------------------- */
+
+model Provider {
+  id           Int      @id @default(autoincrement())
+  emailAddress String   @unique @map("email_address")
+  givenName    String   @map("given_name")
+  surname      String   @map("surname")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  gender              Gender               @relation(fields: [genderId], references: [id])
+  genderId            String               @map("gender_id")
+  providerEthnicities ProviderEthnicity[]
+  providerSpecialties ProviderSpecialty[]
+  providerCredentials ProviderCredential[]
+
+  @@map("providers")
+}
+
+// /* --------------------------- Provider Relations --------------------------- */
+
+model ProviderEthnicity {
+  ethnicity   Ethnicity @relation(fields: [ethnicityId], references: [id])
+  provider    Provider  @relation(fields: [providerId], references: [id])
+  ethnicityId String    @map("ethnicity_id")
+  providerId  Int       @map("provider_id")
+
+  @@id([ethnicityId, providerId])
+  @@map("provider_ethnicities")
+}
+
+model ProviderSpecialty {
+  concern    Concern  @relation(fields: [concernId], references: [id])
+  provider   Provider @relation(fields: [providerId], references: [id])
+  concernId  String   @map("concern_id")
+  providerId Int      @map("provider_id")
+
+  @@id([concernId, providerId])
+  @@map("provider_specialties")
+}
+
+model ProviderCredential {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  provider           Provider                           @relation(fields: [providerId], references: [id])
+  providerId         Int                                @map("provider_id")
+  state              State                              @relation(fields: [stateId], references: [id])
+  stateId            String                             @map("state_id")
+  acceptedInsurances ProviderCredentialInsurancePanel[]
+
+  @@map("provider_credentials")
+}
+
+model ProviderCredentialInsurancePanel {
+  credential ProviderCredential @relation(fields: [providerCredentialId], references: [id])
+  insurance  InsuranceProvider  @relation(fields: [insuranceProviderId], references: [id])
+
+  providerCredentialId Int    @map("provider_credential_id")
+  insuranceProviderId  String @map("insurance_provider_id")
+
+  @@id([providerCredentialId, insuranceProviderId])
+  @@map("provider_credential_insurance_panels")
+}
+
+// /* -------------------------------------------------------------------------- */
+// /*                                  Concepts                                  */
+// /* -------------------------------------------------------------------------- */
+model Gender {
+  id        String     @id
+  name      String
+  providers Provider[]
+
+  @@map("genders")
+}
+
+model Ethnicity {
+  id        String              @id
+  name      String
+  providers ProviderEthnicity[]
+
+  @@map("ethnicities")
+}
+
+model Concern {
+  id        String              @id
+  name      String
+  providers ProviderSpecialty[]
+
+  @@map("concerns")
+}
+
+model InsuranceProvider {
+  id        String                             @id
+  name      String
+  providers ProviderCredentialInsurancePanel[]
+
+  @@map("insurance_providers")
+}
+
+model State {
+  id        String               @id
+  name      String
+  providers ProviderCredential[]
+
+  @@map("states")
+}
