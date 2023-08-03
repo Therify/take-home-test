@@ -8,7 +8,7 @@ export const INSURANCE_PROVIDERS = [
   "United Healthcare",
 ] as const;
 
-export const schema = z.object({});
+export const schema = z.enum(INSURANCE_PROVIDERS);
 
 export type Type = z.infer<typeof schema>;
 
