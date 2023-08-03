@@ -35,6 +35,9 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.12
     version: 13.4.12(eslint@8.46.0)(typescript@5.1.6)
+  js-base64:
+    specifier: ^3.7.5
+    version: 3.7.5
   next:
     specifier: 13.4.12
     version: 13.4.12(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
@@ -4346,6 +4349,10 @@ packages:
       '@sideway/formula': 3.0.1
       '@sideway/pinpoint': 2.0.0
     dev: true
+
+  /js-base64@3.7.5:
+    resolution: {integrity: sha512-3MEt5DTINKqfScXKfJFrRbxkrnk2AxPWGBL/ycjz4dK8iqiSJ06UxD8jh8xuh6p10TX4t2+7FsBYVxxQbMg+qA==}
+    dev: false
 
   /js-sha3@0.8.0:
     resolution: {integrity: sha512-gF1cRrHhIzNfToc802P800N8PpXS+evLLXfsVpowqmAFR9uwbi89WvXg2QspOmXL8QL86J4T1EpFu+yUkwJY3Q==}
