@@ -21,9 +21,11 @@
     "db:studio": "prisma studio"
   },
   "dependencies": {
+    "@emotion/cache": "^11.11.0",
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@faker-js/faker": "^8.0.2",
+    "@mui/icons-material": "^5.14.3",
     "@mui/material": "^5.14.3",
     "@prisma/client": "^5.1.0",
     "@trpc/client": "9.27.3",
