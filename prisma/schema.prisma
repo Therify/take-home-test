@@ -16,6 +16,7 @@ datasource db {
 
 model Provider {
   id           Int      @id @default(autoincrement())
+  avatarUrl    String?  @map("avatar_url")
   emailAddress String   @unique @map("email_address")
   givenName    String   @map("given_name")
   surname      String   @map("surname")
