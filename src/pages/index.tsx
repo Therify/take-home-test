@@ -1,6 +1,7 @@
-import { trpc } from "@/shared/utils/trpc";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
+import { trpc } from "@/shared/utils/trpc";
+import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 
 export default function IndexPage() {
   const hello = trpc.useQuery(["hello", { text: "client" }]);
@@ -8,18 +9,20 @@ export default function IndexPage() {
     return <div>Loading...</div>;
   }
   return (
-    <Box
-      sx={{
-        width: "100dvw",
-        height: "100dvh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-      }}
-    >
-      <Typography variant="display1" component={"p"}>
-        {hello.data.greeting}
-      </Typography>
-    </Box>
+    <WithTopNav>
+      <Box
+        sx={{
+          width: "100dvw",
+          height: "100dvh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Typography variant="display1" component={"p"}>
+          {hello.data.greeting}
+        </Typography>
+      </Box>
+    </WithTopNav>
   );
 }
