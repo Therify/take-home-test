@@ -15,17 +15,16 @@ const preview: Preview = {
       },
     },
   },
+  decorators: [
+    withThemeFromJSXProvider({
+      themes: {
+        light: theme,
+      },
+      defaultTheme: "light",
+      Provider: ThemeProvider,
+      GlobalStyles: CssBaseline,
+    }),
+  ],
 };
-
-export const decorators = [
-  withThemeFromJSXProvider({
-    themes: {
-      light: theme,
-    },
-    defaultTheme: "light",
-    Provider: ThemeProvider,
-    GlobalStyles: CssBaseline,
-  }),
-];
 
 export default preview;
