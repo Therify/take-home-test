@@ -1,11 +1,10 @@
-import { trpc } from "@/shared/utils/trpc";
-
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
-import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+
+import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 
 function getRandomPhoto(): string {
   const PHOTO_URLS = [
@@ -19,10 +18,6 @@ function getRandomPhoto(): string {
 }
 
 export default function IndexPage() {
-  const hello = trpc.useQuery(["hello", { text: "client" }]);
-  if (!hello.data) {
-    return <div>Loading...</div>;
-  }
   return (
     <WithTopNav>
       <Box sx={{ height: "100%" }}>
