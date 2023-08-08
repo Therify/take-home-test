@@ -24,8 +24,12 @@ export const TopNav = () => {
   return (
     <AppBar
       position="static"
-      variant="outlined"
-      sx={{ bgcolor: "shades.white" }}
+      sx={{
+        bgcolor: "shades.white",
+        boxShadow: "none",
+        borderBottom: "1px solid #E5E5E5",
+      }}
+      component={"nav"}
     >
       <Container maxWidth="xl">
         <Toolbar
