@@ -59,6 +59,9 @@ dependencies:
   next:
     specifier: 13.4.12
     version: 13.4.12(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
+  next-superjson-plugin:
+    specifier: ^0.5.9
+    version: 0.5.9(next@13.4.12)(superjson@1.13.1)
   react:
     specifier: 18.2.0
     version: 18.2.0
@@ -68,6 +71,9 @@ dependencies:
   react-query:
     specifier: '3'
     version: 3.39.3(react-dom@18.2.0)(react@18.2.0)
+  superjson:
+    specifier: ^1.13.1
+    version: 1.13.1
   typescript:
     specifier: 5.1.6
     version: 5.1.6
@@ -7034,6 +7040,13 @@ packages:
       is-what: 3.14.1
     dev: true
 
+  /copy-anything@3.0.5:
+    resolution: {integrity: sha512-yCEafptTtb4bk7GLEQoM8KVJpxAfdBJYaXyzQEgQQQgYrZiDp8SJmGKlYza6CYjEDNstAdNdKA3UuoULlEbS6w==}
+    engines: {node: '>=12.13'}
+    dependencies:
+      is-what: 4.1.15
+    dev: false
+
   /core-js-compat@3.32.0:
     resolution: {integrity: sha512-7a9a3D1k4UCVKnLhrgALyFcP7YCsLOQIxPd0dKjf/6GuPcgyiGP70ewWdCGrSK7evyhymi0qO4EqCmSJofDeYw==}
     dependencies:
@@ -9741,6 +9754,11 @@ packages:
     resolution: {integrity: sha512-sNxgpk9793nzSs7bA6JQJGeIuRBQhAaNGG77kzYQgMkrID+lS6SlK07K5LaptscDlSaIgH+GPFzf+d75FVxozA==}
     dev: true
 
+  /is-what@4.1.15:
+    resolution: {integrity: sha512-uKua1wfy3Yt+YqsD6mTUEa2zSi3G1oPlqTflgaPJ7z63vUGN5pxFpnQfeSLMFnJDEsdvOtkp1rUWkYjB4YfhgA==}
+    engines: {node: '>=12.13'}
+    dev: false
+
   /is-wsl@2.2.0:
     resolution: {integrity: sha512-fKzAra0rGJUUBwGBgNkHZuToZcn+TtXHpeCgmkMJMMYx1sQDYaCSyjJBSCa2nH1DGm7s3n1oBnohoVTBaN7Lww==}
     engines: {node: '>=8'}
@@ -11110,6 +11128,17 @@ packages:
   /neo-async@2.6.2:
     resolution: {integrity: sha512-Yd3UES5mWCSqR+qNT93S3UoYUkqAZ9lLg8a7g9rimsWmYGK8cVToA4/sF3RrshdyV3sAGMXVUmpMYOw+dLpOuw==}
     dev: true
+
+  /next-superjson-plugin@0.5.9(next@13.4.12)(superjson@1.13.1):
+    resolution: {integrity: sha512-xEU+SvrSDk8PGAQ2TrJM/OhkZBcWjWWqSjpUtlxTAI9ovTjKBxxQumcFt7oXzoBLJsRtq0BWTHrcnzL/9izXPQ==}
+    peerDependencies:
+      next: ^13
+      superjson: ^1
+    dependencies:
+      hoist-non-react-statics: 3.3.2
+      next: 13.4.12(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0)
+      superjson: 1.13.1
+    dev: false
 
   /next@13.4.12(@babel/core@7.22.9)(react-dom@18.2.0)(react@18.2.0):
     resolution: {integrity: sha512-eHfnru9x6NRmTMcjQp6Nz0J4XH9OubmzOa7CkWL+AUrUxpibub3vWwttjduu9No16dug1kq04hiUUpo7J3m3Xw==}
@@ -13215,6 +13244,13 @@ packages:
 
   /stylis@4.2.0:
     resolution: {integrity: sha512-Orov6g6BB1sDfYgzWfTHDOxamtX1bE/zo104Dh9e6fqJ3PooipYyfJ0pUmrZO2wAvO8YbEyeFrkV91XTsGMSrw==}
+    dev: false
+
+  /superjson@1.13.1:
+    resolution: {integrity: sha512-AVH2eknm9DEd3qvxM4Sq+LTCkSXE2ssfh1t11MHMXyYXFQyQ1HLgVvV+guLTsaQnJU3gnaVo34TohHPulY/wLg==}
+    engines: {node: '>=10'}
+    dependencies:
+      copy-anything: 3.0.5
     dev: false
 
   /supports-color@5.5.0:

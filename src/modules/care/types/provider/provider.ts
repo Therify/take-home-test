@@ -4,9 +4,11 @@ import { Concern } from "../conern";
 import { Ethnicity } from "../ethnicity";
 import { Credential } from "../credential";
 import { faker } from "@faker-js/faker";
+import { Designation } from "../designation";
 
 export const schema = z.object({
   emailAddress: z.string().email(),
+  designation: Designation.schema,
   avatarUrl: z.string().url().optional(),
   givenName: z.string().nonempty(),
   surname: z.string().nonempty(),
@@ -41,6 +43,7 @@ export const isValid = (value: unknown): value is Type => {
 export function generateFakeProvider(overrides: Partial<Type> = {}): Type {
   return {
     emailAddress: faker.internet.email(),
+    designation: faker.helpers.arrayElement(Designation.DESIGNATIONS),
     avatarUrl: faker.internet.avatar(),
     givenName: faker.person.firstName(),
     surname: faker.person.lastName(),

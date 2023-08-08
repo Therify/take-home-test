@@ -2,6 +2,28 @@ import { encode } from "js-base64";
 import { prisma } from "@/shared/utils/prisma";
 import { Provider } from "../../types/provider";
 
+const PROVIDER_INCLUDE_STATEMENT = {
+  include: {
+    gender: true,
+    providerCredentials: {
+      include: {
+        state: true,
+        acceptedInsurances: true,
+      },
+    },
+    providerEthnicities: {
+      include: {
+        ethnicity: true,
+      },
+    },
+    providerSpecialties: {
+      include: {
+        concern: true,
+      },
+    },
+  },
+};
+
 function connectOrCreate(data: string) {
   return {
     connectOrCreate: {
@@ -62,4 +84,11 @@ export async function insert(
     updatedAt,
     ...provider,
   };
+}
+
+export async function findMany() {
+  const providers = await prisma.provider.findMany({
+    ...PROVIDER_INCLUDE_STATEMENT,
+  });
+  return providers.map(({ createdAt, updatedAt, ...provider }) => provider);
 }

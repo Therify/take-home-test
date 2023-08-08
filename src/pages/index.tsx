@@ -5,6 +5,16 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 
 import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
+import { ProviderRepository } from "@/modules/care/repository/provider";
+
+export async function getServerSideProps() {
+  const providers = await ProviderRepository.findMany();
+  return {
+    props: {
+      providers,
+    },
+  };
+}
 
 function getRandomPhoto(): string {
   const PHOTO_URLS = [
@@ -17,7 +27,11 @@ function getRandomPhoto(): string {
   return PHOTO_URLS[Math.floor(Math.random() * PHOTO_URLS.length)];
 }
 
-export default function IndexPage() {
+interface IndexPageProps {
+  providers: any[];
+}
+
+export default function IndexPage({ providers }: IndexPageProps) {
   return (
     <WithTopNav>
       <Box sx={{ height: "100%" }}>
@@ -68,6 +82,13 @@ export default function IndexPage() {
                 <Button sx={{ display: "inline-flex" }}>Get Matched</Button>
               </Box>
             </Stack>
+          </Box>
+          <Box>
+            <ul>
+              {providers.map((provider) => (
+                <li key={provider}></li>
+              ))}
+            </ul>
           </Box>
         </Container>
       </Box>
