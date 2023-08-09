@@ -1,6 +1,34 @@
 import { encode } from "js-base64";
+import { type Prisma, Provider as PrismaProvider } from "@prisma/client";
 import { prisma } from "@/shared/utils/prisma";
 import { Provider } from "../../types/provider";
+
+type ProviderWithRelations = Prisma.ProviderGetPayload<{
+  include: {
+    gender: true;
+    providerCredentials: {
+      include: {
+        state: true;
+        acceptedInsurances: {
+          include: {
+            insurance: true;
+          };
+        };
+      };
+    };
+    providerEthnicities: {
+      include: {
+        ethnicity: true;
+      };
+    };
+    providerSpecialties: {
+      include: {
+        concern: true;
+      };
+    };
+  };
+}> &
+  PrismaProvider;
 
 const PROVIDER_INCLUDE_STATEMENT = {
   include: {
@@ -8,7 +36,11 @@ const PROVIDER_INCLUDE_STATEMENT = {
     providerCredentials: {
       include: {
         state: true,
-        acceptedInsurances: true,
+        acceptedInsurances: {
+          include: {
+            insurance: true,
+          },
+        },
       },
     },
     providerEthnicities: {
@@ -36,6 +68,25 @@ function connectOrCreate(data: string) {
       },
     },
   };
+}
+
+export function fromPersistenceToModel({
+  providerCredentials,
+  providerEthnicities,
+  providerSpecialties,
+  gender,
+  ...provider
+}: ProviderWithRelations): Provider.Type {
+  return Provider.withPersistedPropsSchema.parse({
+    ...provider,
+    gender: gender.name,
+    ethnicity: providerEthnicities.map((pe) => pe.ethnicity.name),
+    specialties: providerSpecialties.map((ps) => ps.concern.name),
+    credentials: providerCredentials.map((pc) => ({
+      state: pc.state.name,
+      acceptedInsurances: pc.acceptedInsurances.map((ai) => ai.insurance.name),
+    })),
+  });
 }
 
 export async function insert(
@@ -87,8 +138,6 @@ export async function insert(
 }
 
 export async function findMany() {
-  const providers = await prisma.provider.findMany({
-    ...PROVIDER_INCLUDE_STATEMENT,
-  });
-  return providers.map(({ createdAt, updatedAt, ...provider }) => provider);
+  const providers = await prisma.provider.findMany(PROVIDER_INCLUDE_STATEMENT);
+  return providers.map(fromPersistenceToModel);
 }

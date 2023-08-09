@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -6,6 +7,8 @@ import Typography from "@mui/material/Typography";
 
 import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 import { ProviderRepository } from "@/modules/care/repository/provider";
+import { Provider } from "@/modules/care/types/provider";
+import { ProviderCard } from "@/modules/care/components/ProviderCard/ProviderCard";
 
 export async function getServerSideProps() {
   const providers = await ProviderRepository.findMany();
@@ -28,10 +31,10 @@ function getRandomPhoto(): string {
 }
 
 interface IndexPageProps {
-  providers: any[];
+  providers: Provider.WithPersistedProps[];
 }
 
-export default function IndexPage({ providers }: IndexPageProps) {
+export default function IndexPage({ providers = [] }: IndexPageProps) {
   return (
     <WithTopNav>
       <Box sx={{ height: "100%" }}>
@@ -45,6 +48,7 @@ export default function IndexPage({ providers }: IndexPageProps) {
             sx={{
               position: "relative",
               borderRadius: "0.5rem",
+              width: "100%",
               height: "20rem",
               aspectRatio: "16/4",
               backgroundColor: "shades.black",
@@ -84,11 +88,13 @@ export default function IndexPage({ providers }: IndexPageProps) {
             </Stack>
           </Box>
           <Box>
-            <ul>
-              {providers.map((provider) => (
-                <li key={provider}></li>
+            <Grid container spacing={2} sx={{ p: 4 }}>
+              {providers.map((p) => (
+                <Grid item key={p.id} xs={12} md={6} lg={4}>
+                  <ProviderCard provider={p} />
+                </Grid>
               ))}
-            </ul>
+            </Grid>
           </Box>
         </Container>
       </Box>
