@@ -9,7 +9,7 @@ import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 import { ProviderRepository } from "@/modules/care/repository/provider";
 import { Provider } from "@/modules/care/types/provider";
 import { ProviderCard } from "@/modules/care/components/ProviderCard/ProviderCard";
-import {  useEffect, useState } from "react";
+import {  ReactNode, useEffect, useState } from "react";
 import { MemberPreferences, PreferenceForm } from "@/modules/care/components/PreferenceForm/PreferenceForm";
 import { providersFilteredByPreferences } from "@/shared/utils/memberPreferences";
 
@@ -50,6 +50,19 @@ export default function IndexPage({ providers = [] }: IndexPageProps) {
               setFilteredProviders(providersFilteredByPreferences(providers, memberPreferences))
           }
       }, [providers, memberPreferences])
+
+  const DisplayFormButton = ({ children }: { children: ReactNode }) => {
+    return <Button sx={{ display: "inline-flex" }} onClick={() => setDisplayPreferenceForm(true)}>{children}</Button>
+  }
+
+    const NoProvidersMessage = () => {
+        return (
+            <div>
+                <p>There aren&apos;t any providers that match your preferences</p>
+                <DisplayFormButton>Update Preferences</DisplayFormButton>
+            </div>
+        )
+    }
 
   if (displayPreferenceForm) {
       return <PreferenceForm 
@@ -107,13 +120,14 @@ export default function IndexPage({ providers = [] }: IndexPageProps) {
                 Get matched with your first provider
               </Typography>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button sx={{ display: "inline-flex" }} onClick={() => setDisplayPreferenceForm(true)}>Get Matched</Button>
+                <DisplayFormButton>Get Matched</DisplayFormButton>
               </Box>
             </Stack>
           </Box>
           <Box>
             <Grid container spacing={2} sx={{ p: 4 }}>
-              {filteredProviders.map((p) => (
+              {filteredProviders.length === 0 && <NoProvidersMessage />}
+              {filteredProviders.length > 0 && filteredProviders.map((p) => (
                 <Grid item key={p.id} xs={12} md={6} lg={4}>
                   <ProviderCard provider={p} />
                 </Grid>
