@@ -9,13 +9,13 @@ import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 import { ProviderRepository } from "@/modules/care/repository/provider";
 import { Provider } from "@/modules/care/types/provider";
 import { ProviderCard } from "@/modules/care/components/ProviderCard/ProviderCard";
-import { useEffect, useState } from "react";
+import {  useEffect, useState } from "react";
 import { MemberPreferences, PreferenceForm } from "@/modules/care/components/PreferenceForm/PreferenceForm";
-
-const MEMBER_PREFERENCES = "memberPreferences"
+import { providersFilteredByPreferences } from "@/shared/utils/memberPreferences";
 
 export async function getServerSideProps() {
   const providers = await ProviderRepository.findMany();
+  console.log(providers[0].credentials[0])
   return {
     props: {
       providers,
@@ -43,9 +43,20 @@ export default function IndexPage({ providers = [] }: IndexPageProps) {
 
   const [memberPreferences, setMemberPreferences] = useState<MemberPreferences | null>(null)
   const [displayPreferenceForm, setDisplayPreferenceForm] = useState(false)
+  const [filteredProviders, setFilteredProviders] = useState(providersFilteredByPreferences(providers, memberPreferences))
+
+  useEffect(() => {
+          if (memberPreferences !== null ) {
+              setFilteredProviders(providersFilteredByPreferences(providers, memberPreferences))
+          }
+      }, [providers, memberPreferences])
 
   if (displayPreferenceForm) {
-      return <PreferenceForm preferences={memberPreferences} setMemberPreferences={setMemberPreferences} setDisplayPreferenceForm={setDisplayPreferenceForm} />
+      return <PreferenceForm 
+          preferences={memberPreferences} 
+          setMemberPreferences={setMemberPreferences} 
+          setDisplayPreferenceForm={setDisplayPreferenceForm} 
+      />
   }
 
   return (
@@ -102,7 +113,7 @@ export default function IndexPage({ providers = [] }: IndexPageProps) {
           </Box>
           <Box>
             <Grid container spacing={2} sx={{ p: 4 }}>
-              {providers.map((p) => (
+              {filteredProviders.map((p) => (
                 <Grid item key={p.id} xs={12} md={6} lg={4}>
                   <ProviderCard provider={p} />
                 </Grid>

@@ -18,7 +18,6 @@ import { Concern } from "../../types/conern";
 import { State } from "../../types/state";
 import { Ethnicity } from "../../types/ethnicity";
 import { InsuranceProvider } from "../../types/insurance-provider";
-import { handleWebpackExternalForEdgeRuntime } from "next/dist/build/webpack/plugins/middleware-plugin";
 
 type GenderPreference = Gender.Type | "Any"
 type DesignationPreference = Designation.Type | "Any"
@@ -49,8 +48,6 @@ export interface MemberPreferences {
     insurance: InsurancePreference;
     ethnicity: EthnicityPreference;
 }
-
-export const MEMBER_PREFERENCES = "memberPreferences"
 
 function PreferenceSelection({ title, options, state, stateSetter }: PreferenceSelectionProps) {
     return (
