@@ -18,6 +18,7 @@ import { Concern } from "../../types/conern";
 import { State } from "../../types/state";
 import { Ethnicity } from "../../types/ethnicity";
 import { InsuranceProvider } from "../../types/insurance-provider";
+import { handleWebpackExternalForEdgeRuntime } from "next/dist/build/webpack/plugins/middleware-plugin";
 
 type GenderPreference = Gender.Type | "Any"
 type DesignationPreference = Designation.Type | "Any"
@@ -26,6 +27,12 @@ type StatePreference = State.Type | "Any"
 type InsurancePreference = InsuranceProvider.Type | "Any"
 type EthnicityPreference = Ethnicity.Type | "Any"
 type Preference = GenderPreference | DesignationPreference | SpecialtyPreference | StatePreference | InsurancePreference | EthnicityPreference
+
+interface PreferenceFormProps {
+     preferences: MemberPreferences | null;
+     setMemberPreferences: Dispatch<SetStateAction<any>>; 
+     setDisplayPreferenceForm: Dispatch<SetStateAction<boolean>>; 
+}
 
 interface PreferenceSelectionProps {
     title: string;
@@ -59,13 +66,18 @@ function PreferenceSelection({ title, options, state, stateSetter }: PreferenceS
     )
 }
 
-export function PreferenceForm({ preferences, handleSubmit }: { preferences: MemberPreferences | null, handleSubmit: Function }) {
+export function PreferenceForm({ preferences, setMemberPreferences, setDisplayPreferenceForm }: PreferenceFormProps) {
     const [gender, setGender] = useState<GenderPreference>(preferences?.gender ?? "Any")
     const [designation, setDesignation] = useState<DesignationPreference>(preferences?.designation ?? "Any")
     const [specialty, setSpecialty] = useState<SpecialtyPreference>(preferences?.specialty ?? "Any")
     const [state, setState] = useState<StatePreference>(preferences?.state ?? "Any")
     const [insurance, setInsurance] = useState<InsurancePreference>(preferences?.insurance ?? "Any")
     const [ethnicity, setEthnicity] = useState<EthnicityPreference>(preferences?.ethnicity ?? "Any")
+
+    const handleFormSubmit = (): void => {
+        setMemberPreferences({gender, designation, specialty, state, insurance, ethnicity})
+        setDisplayPreferenceForm(false)
+    }
 
     return (
         <FormControl>
@@ -75,7 +87,7 @@ export function PreferenceForm({ preferences, handleSubmit }: { preferences: Mem
             <PreferenceSelection title="State" options={STATES} state={state} stateSetter={setState} />
             <PreferenceSelection title="Insurance" options={INSURANCE_PROVIDERS} state={insurance} stateSetter={setInsurance} />
             <PreferenceSelection title="Ethnicity" options={ETHNICITIES} state={ethnicity} stateSetter={setEthnicity} />
-            <Button type="submit" onClick={() => handleSubmit({gender, designation, specialty, state, insurance, ethnicity})} >Submit</Button>
+            <Button type="submit" onClick={handleFormSubmit} >Submit</Button>
         </FormControl>
     )
 }
