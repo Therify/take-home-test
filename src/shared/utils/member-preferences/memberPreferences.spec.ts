@@ -21,6 +21,21 @@ describe("memberPreferences", function () {
         providers.push(provider);
       }
 
+      expect(providersFilteredByPreferences(providers, null)).toStrictEqual(
+        providers
+      );
+    });
+  });
+
+  describe("filter providers with all preferences set to 'Any'", function () {
+    it("should return the providers that were passed in", function () {
+      const providers = [];
+      for (const provider of Array.from({ length: 25 }).map(
+        () => Provider.generateFakeProvider() as Provider.WithPersistedProps
+      )) {
+        providers.push(provider);
+      }
+
       expect(
         providersFilteredByPreferences(providers, defaultPreferences)
       ).toStrictEqual(providers);
