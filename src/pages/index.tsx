@@ -10,8 +10,9 @@ import { ProviderRepository } from "@/modules/care/repository/provider";
 import { Provider } from "@/modules/care/types/provider";
 import { ProviderCard } from "@/modules/care/components/ProviderCard/ProviderCard";
 import {  ReactNode, useEffect, useState } from "react";
-import { MemberPreferences, PreferenceForm } from "@/modules/care/components/PreferenceForm/PreferenceForm";
-import { providersFilteredByPreferences } from "@/shared/utils/memberPreferences";
+import {  PreferenceForm } from "@/modules/care/components/PreferenceForm/PreferenceForm";
+import { providersFilteredByPreferences } from "@/shared/utils/member-preferences/memberPreferences";
+import { MemberPreferences } from "@/modules/care/types/member-preferences";
 
 export async function getServerSideProps() {
   const providers = await ProviderRepository.findMany();
@@ -41,7 +42,7 @@ interface IndexPageProps {
 
 export default function IndexPage({ providers = [] }: IndexPageProps) {
 
-  const [memberPreferences, setMemberPreferences] = useState<MemberPreferences | null>(null)
+  const [memberPreferences, setMemberPreferences] = useState<MemberPreferences.Type | null>(null)
   const [displayPreferenceForm, setDisplayPreferenceForm] = useState(false)
   const [filteredProviders, setFilteredProviders] = useState(providersFilteredByPreferences(providers, memberPreferences))
 
