@@ -126,9 +126,9 @@ export default function IndexPage({ providers = [] }: IndexPageProps) {
             </Stack>
           </Box>
           <Box>
-          {filteredProviders.length > 0 && <NoProvidersMessage />}
+          {filteredProviders.length === 0 && <NoProvidersMessage />}
             <Grid container spacing={2} sx={{ p: 4 }}>
-              {filteredProviders.length === 0 && filteredProviders.map((p) => (
+              {filteredProviders.length > 0 && filteredProviders.map((p) => (
                 <Grid item key={p.id} xs={12} md={6} lg={4}>
                   <ProviderCard provider={p} />
                 </Grid>
