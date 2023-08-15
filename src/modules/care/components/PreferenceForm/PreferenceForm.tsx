@@ -18,6 +18,7 @@ import { Concern } from "../../types/conern";
 import { State } from "../../types/state";
 import { Ethnicity } from "../../types/ethnicity";
 import { InsuranceProvider } from "../../types/insurance-provider";
+import Grid from "@mui/material/Grid";
 
 type GenderPreference = Gender.Type | "Any"
 type DesignationPreference = Designation.Type | "Any"
@@ -28,9 +29,9 @@ type EthnicityPreference = Ethnicity.Type | "Any"
 type Preference = GenderPreference | DesignationPreference | SpecialtyPreference | StatePreference | InsurancePreference | EthnicityPreference
 
 interface PreferenceFormProps {
-     preferences: MemberPreferences | null;
-     setMemberPreferences: Dispatch<SetStateAction<any>>; 
-     setDisplayPreferenceForm: Dispatch<SetStateAction<boolean>>; 
+    preferences: MemberPreferences | null;
+    setMemberPreferences: Dispatch<SetStateAction<any>>;
+    setDisplayPreferenceForm: Dispatch<SetStateAction<boolean>>;
 }
 
 interface PreferenceSelectionProps {
@@ -51,15 +52,17 @@ export interface MemberPreferences {
 
 function PreferenceSelection({ title, options, state, stateSetter }: PreferenceSelectionProps) {
     return (
-        <Box sx={{ height: "100%", margin: "10px" }}>
-            <FormLabel id={title.toLowerCase()}>{title}</FormLabel>
-            <RadioGroup value={state} sx={{ display: "flex", flexDirection: "row" }}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => stateSetter(e.target.value)}
-            >
-                {[...options, "Any"].map(option => <FormControlLabel key={option} value={option} control={<Radio />} label={option} />)}
-            </RadioGroup>
-            <br />
-        </Box>
+        <Grid item xs={12} md={6} lg={4}>
+            <Box sx={{ height: "100%", margin: "5px" }}>
+                <FormLabel id={title.toLowerCase()}>{title}</FormLabel>
+                <RadioGroup value={state} sx={{ display: "flex", flexDirection: "row" }}
+                    onChange={(e: ChangeEvent<HTMLInputElement>) => stateSetter(e.target.value)}
+                >
+                    {[...options, "Any"].map(option => <FormControlLabel key={option} value={option} control={<Radio />} label={option} />)}
+                </RadioGroup>
+                <br />
+            </Box>
+        </Grid>
     )
 }
 
@@ -72,19 +75,22 @@ export function PreferenceForm({ preferences, setMemberPreferences, setDisplayPr
     const [ethnicity, setEthnicity] = useState<EthnicityPreference>(preferences?.ethnicity ?? "Any")
 
     const handleFormSubmit = (): void => {
-        setMemberPreferences({gender, designation, specialty, state, insurance, ethnicity})
+        setMemberPreferences({ gender, designation, specialty, state, insurance, ethnicity })
         setDisplayPreferenceForm(false)
     }
 
     return (
-        <FormControl>
-            <PreferenceSelection title="Gender" options={GENDERS} state={gender} stateSetter={setGender} />
-            <PreferenceSelection title="Designation" options={DESIGNATIONS} state={designation} stateSetter={setDesignation} />
-            <PreferenceSelection title="Specialty" options={CONCERNS} state={specialty} stateSetter={setSpecialty} />
-            <PreferenceSelection title="State" options={STATES} state={state} stateSetter={setState} />
-            <PreferenceSelection title="Insurance" options={INSURANCE_PROVIDERS} state={insurance} stateSetter={setInsurance} />
-            <PreferenceSelection title="Ethnicity" options={ETHNICITIES} state={ethnicity} stateSetter={setEthnicity} />
-            <Button type="submit" onClick={handleFormSubmit} >Submit</Button>
+        <FormControl sx={{ padding: "0 10% 5% 10%" }}>
+
+            <Grid container spacing={2} sx={{ p: 4 }}>
+                <PreferenceSelection title="Gender" options={GENDERS} state={gender} stateSetter={setGender} />
+                <PreferenceSelection title="Designation" options={DESIGNATIONS} state={designation} stateSetter={setDesignation} />
+                <PreferenceSelection title="Specialty" options={CONCERNS} state={specialty} stateSetter={setSpecialty} />
+                <PreferenceSelection title="State" options={STATES} state={state} stateSetter={setState} />
+                <PreferenceSelection title="Insurance" options={INSURANCE_PROVIDERS} state={insurance} stateSetter={setInsurance} />
+                <PreferenceSelection title="Ethnicity" options={ETHNICITIES} state={ethnicity} stateSetter={setEthnicity} />
+                <Button sx={{ display: "inline-flex", width: "fit-content", alignSelf: "center" }} type="submit" onClick={handleFormSubmit} >Submit</Button>
+            </Grid>
         </FormControl>
     )
 }
