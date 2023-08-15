@@ -6,30 +6,20 @@ import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import { Gender } from "../../types/gender";
 import { GENDERS } from "../../types/gender/gender";
 import { DESIGNATIONS } from "../../types/designation/designation";
 import { CONCERNS } from "../../types/conern/concern";
 import { STATES } from "../../types/state/state";
 import { INSURANCE_PROVIDERS } from "../../types/insurance-provider/insuranceProvider";
 import { ETHNICITIES } from "../../types/ethnicity/ethnicity";
-import { Designation } from "../../types/designation";
-import { Concern } from "../../types/conern";
-import { State } from "../../types/state";
-import { Ethnicity } from "../../types/ethnicity";
-import { InsuranceProvider } from "../../types/insurance-provider";
 import Grid from "@mui/material/Grid";
+import { MemberPreferences } from "../../types/member-preferences";
+import { DesignationPreferenceType, EthnicityPreferenceType, GenderPreferenceType, InsurancePreferenceType, SpecialtyPreferenceType, StatePreferenceType } from "../../types/member-preferences/memberPreferences";
 
-type GenderPreference = Gender.Type | "Any"
-type DesignationPreference = Designation.Type | "Any"
-type SpecialtyPreference = Concern.Type | "Any"
-type StatePreference = State.Type | "Any"
-type InsurancePreference = InsuranceProvider.Type | "Any"
-type EthnicityPreference = Ethnicity.Type | "Any"
-type Preference = GenderPreference | DesignationPreference | SpecialtyPreference | StatePreference | InsurancePreference | EthnicityPreference
+type Preference = GenderPreferenceType | DesignationPreferenceType | SpecialtyPreferenceType | StatePreferenceType | InsurancePreferenceType | EthnicityPreferenceType
 
 interface PreferenceFormProps {
-    preferences: MemberPreferences | null;
+    preferences: MemberPreferences.Type | null;
     setMemberPreferences: Dispatch<SetStateAction<any>>;
     setDisplayPreferenceForm: Dispatch<SetStateAction<boolean>>;
 }
@@ -39,15 +29,6 @@ interface PreferenceSelectionProps {
     options: readonly Preference[];
     state: Preference;
     stateSetter: Dispatch<SetStateAction<any>>;
-}
-
-export interface MemberPreferences {
-    gender: GenderPreference;
-    designation: DesignationPreference;
-    specialty: SpecialtyPreference;
-    state: StatePreference;
-    insurance: InsurancePreference;
-    ethnicity: EthnicityPreference;
 }
 
 function PreferenceSelection({ title, options, state, stateSetter }: PreferenceSelectionProps) {
@@ -67,12 +48,12 @@ function PreferenceSelection({ title, options, state, stateSetter }: PreferenceS
 }
 
 export function PreferenceForm({ preferences, setMemberPreferences, setDisplayPreferenceForm }: PreferenceFormProps) {
-    const [gender, setGender] = useState<GenderPreference>(preferences?.gender ?? "Any")
-    const [designation, setDesignation] = useState<DesignationPreference>(preferences?.designation ?? "Any")
-    const [specialty, setSpecialty] = useState<SpecialtyPreference>(preferences?.specialty ?? "Any")
-    const [state, setState] = useState<StatePreference>(preferences?.state ?? "Any")
-    const [insurance, setInsurance] = useState<InsurancePreference>(preferences?.insurance ?? "Any")
-    const [ethnicity, setEthnicity] = useState<EthnicityPreference>(preferences?.ethnicity ?? "Any")
+    const [gender, setGender] = useState<GenderPreferenceType>(preferences?.gender ?? "Any")
+    const [designation, setDesignation] = useState<DesignationPreferenceType>(preferences?.designation ?? "Any")
+    const [specialty, setSpecialty] = useState<SpecialtyPreferenceType>(preferences?.specialty ?? "Any")
+    const [state, setState] = useState<StatePreferenceType>(preferences?.state ?? "Any")
+    const [insurance, setInsurance] = useState<InsurancePreferenceType>(preferences?.insurance ?? "Any")
+    const [ethnicity, setEthnicity] = useState<EthnicityPreferenceType>(preferences?.ethnicity ?? "Any")
 
     const handleFormSubmit = (): void => {
         setMemberPreferences({ gender, designation, specialty, state, insurance, ethnicity })
