@@ -1,7 +1,7 @@
-import { MemberPreferences } from "@/modules/care/components/PreferenceForm/PreferenceForm";
+import { MemberPreferences } from "@/modules/care/types/member-preferences";
 import { Provider } from "@/modules/care/types/provider";
 
-export function providersFilteredByPreferences(providers: Provider.WithPersistedProps[], preferences: MemberPreferences | null): Provider.WithPersistedProps[] {
+export function providersFilteredByPreferences(providers: Provider.WithPersistedProps[], preferences: MemberPreferences.Type | null): Provider.WithPersistedProps[] {
     if (preferences === null) {
         return providers
     }
