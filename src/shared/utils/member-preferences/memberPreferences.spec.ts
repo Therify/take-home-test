@@ -11,6 +11,15 @@ const defaultPreferences: MemberPreferences.Type = {
   ethnicity: "Any",
 };
 
+const specificPreferences: MemberPreferences.Type = {
+  gender: "Male",
+  designation: "Mental Health Coach",
+  specialty: "Relationships",
+  state: "New York",
+  insurance: "Anthem",
+  ethnicity: "White",
+};
+
 const providers: Provider.WithPersistedProps[] = [];
 for (const provider of Array.from({ length: 25 }).map(
   () => Provider.generateFakeProvider() as Provider.WithPersistedProps
@@ -40,7 +49,7 @@ const specificProviders: Provider.Type[] = [
   },
   {
     emailAddress: "Carole57@gmail.com",
-    designation: "Prescriber",
+    designation: "Mental Health Coach",
     avatarUrl:
       "https://cloudflare-ipfs.com/ipfs/Qmd3W5DuhgHirLHGVixi6V76LhCkZUz6pnFt5AJBiyvHye/avatar/758.jpg",
     givenName: "Karina",
@@ -59,7 +68,6 @@ const specificProviders: Provider.Type[] = [
     surname: "Daugherty",
     gender: "Female",
     ethnicity: [
-      "White",
       "American Indian or Alaska Native",
       "Native Hawaiian or Other Pacific Islander",
       "Other",
@@ -96,24 +104,29 @@ describe("memberPreferences", function () {
     });
   });
 
-  // describe("filter providers by various preferences", function () {
-  //   it("should filter providers based on gender preference", () => {
-  //     const preferences: MemberPreferences.Type = {
-  //       gender: "Male",
-  //       designation: "Any",
-  //       specialty: "Any",
-  //       state: "Any",
-  //       insurance: "Any",
-  //       ethnicity: "Any",
-  //     };
-  //     const expectedProviders = [specificProviders[1]];
-  //     console.log(expectedProviders)
-  //     const filteredProviders = providersFilteredByPreferences(
-  //       specificProviders as Provider.WithPersistedProps[],
-  //       preferences
-  //     );
-  //     console.log(filteredProviders)
-  //     expect(filteredProviders).toBe(expectedProviders);
-  //   });
-  // });
+  describe("filter providers by various preferences", function () {
+    it("should filter providers based on a specific preference", () => {
+      for (const [key, value] of Object.entries(specificPreferences)) {
+        const preferencesWithOneSpecified = {
+          ...defaultPreferences,
+          [key]: value,
+        };
+        const expectedProviders = [specificProviders[1]];
+        const filteredProviders = providersFilteredByPreferences(
+          specificProviders as Provider.WithPersistedProps[],
+          preferencesWithOneSpecified
+        );
+        expect(filteredProviders).toStrictEqual(expectedProviders);
+      }
+    });
+
+    it("should filter providers when all preferences are specified", () => {
+        const expectedProviders = [specificProviders[1]];
+        const filteredProviders = providersFilteredByPreferences(
+          specificProviders as Provider.WithPersistedProps[],
+          specificPreferences
+        );
+        expect(filteredProviders).toStrictEqual(expectedProviders);
+    });
+  });
 });
