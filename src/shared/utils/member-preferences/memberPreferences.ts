@@ -7,7 +7,7 @@ export function providersFilteredByPreferences(providers: Provider.WithPersisted
     }
     return providers.filter(provider => {
         const genderMatchesPreference = preferences.gender === "Any" || provider.gender === preferences.gender
-        const designationMatchesPreference = preferences.gender === "Any" || provider.designation === preferences.designation
+        const designationMatchesPreference = preferences.designation === "Any" || provider.designation === preferences.designation
         const specialtiesMatchPreference = preferences.specialty === "Any" || provider.specialties.includes(preferences.specialty)
 
         const credentialsMatchPreference = provider.credentials.filter(cred => {
