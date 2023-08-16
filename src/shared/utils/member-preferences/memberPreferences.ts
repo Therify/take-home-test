@@ -14,7 +14,7 @@ export function providersFilteredByPreferences(providers: Provider.WithPersisted
             const stateMatchesPreference = preferences.state === "Any" || cred.state === preferences.state
             const insuranceMatchesPreference = preferences.insurance === "Any" || cred.acceptedInsurances.includes(preferences.insurance)
             return stateMatchesPreference && insuranceMatchesPreference
-        })
+        }).length > 0
 
         const ethnicityMatchesPreference = preferences.ethnicity === "Any" || provider.ethnicity.includes(preferences.ethnicity)
 
