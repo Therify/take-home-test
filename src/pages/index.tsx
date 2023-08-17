@@ -9,6 +9,10 @@ import { WithTopNav } from "@/shared/ui/layout/WithTopNav";
 import { ProviderRepository } from "@/modules/care/repository/provider";
 import { Provider } from "@/modules/care/types/provider";
 import { ProviderCard } from "@/modules/care/components/ProviderCard/ProviderCard";
+import {  ReactNode, useEffect, useState } from "react";
+import {  PreferenceForm } from "@/modules/care/components/PreferenceForm/PreferenceForm";
+import { providersFilteredByPreferences } from "@/shared/utils/member-preferences/memberPreferences";
+import useLocalStorage from "@/shared/hooks/useLocalStorage";
 
 export async function getServerSideProps() {
   const providers = await ProviderRepository.findMany();
@@ -18,6 +22,7 @@ export async function getServerSideProps() {
     },
   };
 }
+
 
 function getRandomPhoto(): string {
   const PHOTO_URLS = [
@@ -34,7 +39,41 @@ interface IndexPageProps {
   providers: Provider.WithPersistedProps[];
 }
 
+const MEMBER_PREFERENCES_KEY = "memberPreferences"
+
 export default function IndexPage({ providers = [] }: IndexPageProps) {
+
+  const [memberPreferences, setMemberPreferences] = useLocalStorage(MEMBER_PREFERENCES_KEY, null)
+  const [displayPreferenceForm, setDisplayPreferenceForm] = useState(false)
+  const [filteredProviders, setFilteredProviders] = useState(providersFilteredByPreferences(providers, memberPreferences))
+
+  useEffect(() => {
+          if (memberPreferences !== null ) {
+              setFilteredProviders(providersFilteredByPreferences(providers, memberPreferences))
+          }
+      }, [providers, memberPreferences])
+
+  const DisplayFormButton = ({ children }: { children: ReactNode }) => {
+    return <Button sx={{ display: "inline-flex" }} onClick={() => setDisplayPreferenceForm(true)}>{children}</Button>
+  }
+
+    const NoProvidersMessage = () => {
+        return (
+            <>
+                <p>There aren&apos;t any providers that match your preferences</p>
+                <DisplayFormButton>Update Preferences</DisplayFormButton>
+            </>
+        )
+    }
+
+  if (displayPreferenceForm) {
+      return <PreferenceForm 
+          preferences={memberPreferences} 
+          setMemberPreferences={setMemberPreferences} 
+          setDisplayPreferenceForm={setDisplayPreferenceForm} 
+      />
+  }
+
   return (
     <WithTopNav>
       <Box sx={{ height: "100%" }}>
@@ -83,13 +122,14 @@ export default function IndexPage({ providers = [] }: IndexPageProps) {
                 Get matched with your first provider
               </Typography>
               <Box sx={{ display: "flex", justifyContent: "center" }}>
-                <Button sx={{ display: "inline-flex" }}>Get Matched</Button>
+                <DisplayFormButton>Get Matched</DisplayFormButton>
               </Box>
             </Stack>
           </Box>
           <Box>
+          {filteredProviders.length > 0 && <NoProvidersMessage />}
             <Grid container spacing={2} sx={{ p: 4 }}>
-              {providers.map((p) => (
+              {filteredProviders.length === 0 && filteredProviders.map((p) => (
                 <Grid item key={p.id} xs={12} md={6} lg={4}>
                   <ProviderCard provider={p} />
                 </Grid>
