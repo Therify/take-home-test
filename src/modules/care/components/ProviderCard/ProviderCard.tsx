@@ -12,13 +12,15 @@ import {
   HealthAndSafetyOutlined,
   MedicationOutlined,
 } from "@mui/icons-material";
+import Link from "next/link";
 
 interface ProviderCardProps {
-  provider: Provider.Type;
+  provider: Provider.WithPersistedProps;
 }
 
 export function ProviderCard({ provider }: ProviderCardProps) {
   return (
+<Link href={`/providers/${provider.id}`} style={{ textDecoration: 'none' }}>
     <Box
       sx={{
         padding: 2,
@@ -49,6 +51,7 @@ export function ProviderCard({ provider }: ProviderCardProps) {
         </Stack>
       </Stack>
     </Box>
+    </Link>
   );
 }
 const BASE_AVATAR_SX_PROPS = {
