@@ -12,11 +12,10 @@ import { ProviderCard } from "@/modules/care/components/ProviderCard/ProviderCar
 import {  ReactNode, useEffect, useState } from "react";
 import {  PreferenceForm } from "@/modules/care/components/PreferenceForm/PreferenceForm";
 import { providersFilteredByPreferences } from "@/shared/utils/member-preferences/memberPreferences";
-import { MemberPreferences } from "@/modules/care/types/member-preferences";
+import useLocalStorage from "@/shared/hooks/useLocalStorage";
 
 export async function getServerSideProps() {
   const providers = await ProviderRepository.findMany();
-  console.log(providers[0].credentials[0])
   return {
     props: {
       providers,
@@ -40,9 +39,11 @@ interface IndexPageProps {
   providers: Provider.WithPersistedProps[];
 }
 
+const MEMBER_PREFERENCES_KEY = "memberPreferences"
+
 export default function IndexPage({ providers = [] }: IndexPageProps) {
 
-  const [memberPreferences, setMemberPreferences] = useState<MemberPreferences.Type | null>(null)
+  const [memberPreferences, setMemberPreferences] = useLocalStorage(MEMBER_PREFERENCES_KEY, null)
   const [displayPreferenceForm, setDisplayPreferenceForm] = useState(false)
   const [filteredProviders, setFilteredProviders] = useState(providersFilteredByPreferences(providers, memberPreferences))
 
